@@ -1,5 +1,29 @@
 $(document).ready(function () {
-    console.log("jQuery is working!");
+    console.log("jQuery is working!");  // Check if jQuery is loaded
+
+    // Define all the fun facts
+    const funFacts = [
+        "Chess is played by more than 600 million people worldwide.",
+        "The longest chess game lasted for 269 moves and took over 20 hours to complete.",
+        "The first World Chess Championship was held in 1886.",
+        "The longest chess game ever played was 269 moves long.",
+        "The game of chess was once banned in England in 1240, after a royal decree."
+    ];
+
+    // Display a random fact when the page loads
+    let randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+    $('#chess-fact').html(randomFact);
+
+    // Event for changing the fun fact text when the button is clicked
+    $('#change-fact').click(function () {
+        console.log("Button clicked!");
+
+        // Get a new random fact each time the button is clicked
+        randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+
+        // Display the new random fact
+        $('#chess-fact').html(randomFact);
+    });
 
     // Initialize Slick Carousel
     $(".chess-carousel").slick({
@@ -16,70 +40,55 @@ $(document).ready(function () {
     $("#show-more-btn").click(function () {
         $(".piece-info").html("<p>Chess originated in India in the 6th century. The game has evolved over centuries and is now one of the most popular board games in the world.</p>");
     });
-});
-document.addEventListener("DOMContentLoaded", function () {
-    const hamburger = document.querySelector(".hamburger");
-    const navLinks = document.querySelector(".nav-links");
 
-    hamburger.addEventListener("click", function () {
-        navLinks.classList.toggle("active");
-    });
-});
-$(document).ready(function () {
-    // Clear error messages on focus
-    $("input, select, textarea").on("focus", function () {
-        $(this).removeClass("error");
-        $("#" + $(this).attr("id") + "-error").text("");
-    });
+    // Contact Form Validation (if necessary)
+    $('#contact-form').submit(function (event) {
+        // Reset previous error styles
+        $('.error').remove();
+        $('input, select, textarea').css('border', '1px solid #ccc'); // Reset border color
 
-    // Form submission and validation
-    $("#contact-form").on("submit", function (e) {
-        e.preventDefault(); // Prevent page refresh
-
-        let isValid = true;
+        var isValid = true;
 
         // Validate Name
-        let name = $("#name").val().trim();
-        if (name === "") {
+        var name = $('#name').val();
+        if (name === '') {
             isValid = false;
-            $("#name").addClass("error");
-            $("#name-error").text("Name is required.");
+            $('#name').css('border', '1px solid red');
+            $('#name').after('<div class="error">Name is required</div>');
         }
 
         // Validate Email
-        let email = $("#email").val().trim();
-        let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        if (!emailRegex.test(email)) {
+        var email = $('#email').val();
+        var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailPattern.test(email)) {
             isValid = false;
-            $("#email").addClass("error");
-            $("#email-error").text("Please enter a valid email address.");
+            $('#email').css('border', '1px solid red');
+            $('#email').after('<div class="error">Please enter a valid email</div>');
         }
 
         // Validate Birthday
-        let birthday = $("#birthday").val();
-        if (birthday === "") {
+        var birthday = $('#birthday').val();
+        if (birthday === '') {
             isValid = false;
-            $("#birthday").addClass("error");
-            $("#birthday-error").text("Please select your birthdate.");
+            $('#birthday').css('border', '1px solid red');
+            $('#birthday').after('<div class="error">Birthday is required</div>');
         }
 
-        // Validate Chess Experience Selection
-        let experience = $("#chess-experience").val();
-        if (experience === "") {
+        // Validate Message
+        var message = $('#message').val();
+        if (message === '') {
             isValid = false;
-            $("#chess-experience").addClass("error");
-            $("#experience-error").text("Please select your chess experience level.");
+            $('#message').css('border', '1px solid red');
+            $('#message').after('<div class="error">Message is required</div>');
         }
 
-        // If valid, refresh the page, otherwise show a status message
+        // If everything is valid, refresh the page (or submit the form)
         if (isValid) {
-            $("#status-message").text("Form submitted successfully!").css("color", "green");
-            // In a real scenario, submit the data via AJAX or similar and process it
-            setTimeout(function () {
-                location.reload(); // Refresh the page after success
-            }, 1500);
-        } else {
-            $("#status-message").text("Please fix the errors and try again.").css("color", "red");
+            // Refresh the page
+            location.reload();
         }
+
+        // Prevent form submission to allow validation
+        event.preventDefault();
     });
 });
