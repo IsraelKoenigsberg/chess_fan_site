@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chess Basics</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Add jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Add Slick Carousel CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+    <!-- Add Slick Carousel JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="chess-script.js"></script>
+</head>
+
+<body>
+    <nav>
+        <button class="hamburger">&#9776;</button>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="about.html" class="nav-link">About Chess</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+
+    <h1>Welcome to Chess Basics</h1>
+
+    <!-- Slick Carousel -->
+    <div class="chess-carousel">
+        <div><img src="chess.png" alt="Chess Position 1" class="carousel-img"></div>
+        <div><img src="chess2.png" alt="Chess Position 2" class="carousel-img"></div>
+        <div><img src="chess3.png" alt="Chess Position 3" class="carousel-img"></div>
+        <div><img src="chess4.png" alt="Chess Position 4" class="carousel-img"></div>
+    </div>
+
+    <div id="chess-tip">Click on a navigation link to see more content!</div>
+
+    <h2>Common Chess Pieces</h2>
+    <ul class="list-style">
+        <li>King</li>
+        <li>Queen</li>
+        <li>Bishop</li>
+        <li>Knight</li>
+        <li>Rook</li>
+        <li>Pawn</li>
+    </ul>
+
+    <div class="piece-info"></div>
+
+    <button id="show-more-btn">Show More Chess Info</button>
+</body>
