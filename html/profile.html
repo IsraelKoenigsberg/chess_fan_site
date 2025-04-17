@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chess.com Player Info</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <button class="hamburger">&#9776;</button>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="about.html" class="nav-link">About Chess</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+            <a href="profile.html" class="nav-link">See Profiles</a>
+        </div>
+    </nav>
+
+    <h1>Chess.com Player Info</h1>
+    <input type="text" id="username" placeholder="Enter Username">
+    <button id="fetchData">Get Data</button>
+    <div id="results"></div>
+
+    <script src="../javascript/chess-profile-fetcher.js"></script>
+</body>
+
+</html>
