@@ -31,7 +31,7 @@
     </nav>
 
     <h1>Contact Us</h1>
-    <form id="contact-form">
+    <form id="contact-form" method="POST" action="/contact">
         <div class="form-group">
             <label for="name">Full Name:</label>
             <input type="text" id="name" name="name">
@@ -75,6 +75,10 @@
 
         <button type="submit" id="submit-btn">Submit</button>
     </form>
+
+    <!-- Add this to show the status message -->
+    <div id="status-message"></div>
+
 
     <div id="status-message"></div>
 
