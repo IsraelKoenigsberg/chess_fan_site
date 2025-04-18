@@ -31,7 +31,7 @@
     </nav>
 
     <h1>Contact Us</h1>
-    <form id="contact-form" method="POST" action="/contact">
+    <form id="contact-form" method="POST" action="http://localhost:3000/contact">
         <div class="form-group">
             <label for="name">Full Name:</label>
             <input type="text" id="name" name="name">
@@ -51,11 +51,17 @@
         </div>
 
         <div class="form-group">
-            <label>Chess Interest:</label>
-            <input type="checkbox" id="beginner" name="interest" value="beginner"> Beginner
-            <input type="checkbox" id="intermediate" name="interest" value="intermediate"> Intermediate
-            <input type="checkbox" id="advanced" name="interest" value="advanced"> Advanced
+            <label>Chess Interest:</label><br>
+            <input type="radio" id="beginner" name="interest" value="beginner">
+            <label for="beginner">Beginner</label><br>
+
+            <input type="radio" id="intermediate" name="interest" value="intermediate">
+            <label for="intermediate">Intermediate</label><br>
+
+            <input type="radio" id="advanced" name="interest" value="advanced">
+            <label for="advanced">Advanced</label><br>
         </div>
+
 
         <div class="form-group">
             <label for="chess-experience">How long have you been playing chess?</label>
@@ -75,10 +81,6 @@
 
         <button type="submit" id="submit-btn">Submit</button>
     </form>
-
-    <!-- Add this to show the status message -->
-    <div id="status-message"></div>
-
 
     <div id="status-message"></div>
 

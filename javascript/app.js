@@ -5,25 +5,28 @@ const Contact = require('./models/userModel');
 
 const app = express();
 
-// Set up body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// Connect to MongoDB (replace with your Atlas URL if needed)
-mongoose.connect('mongodb+srv://yisraelkoenigsberg:VkhPXBb1J7XAVWv6@cluster0.wbu0e35.mongodb.net/UserInformation?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+// Connect to MongoDB
+mongoose.connect('mongodb+srv://yisraelkoenigsberg:VkhPXBb1J7XAVWv6@cluster0.wbu0e35.mongodb.net/UserInformation?retryWrites=true&w=majority')
     .then(() => console.log('Connected to MongoDB'))
     .catch((err) => console.error('Error connecting to MongoDB:', err));
 
-// Endpoint to handle form submission
-app.post('/testdb', (req, res) => {
-    const { name, email, message } = req.body;
+// Handle form submission
+app.post('/contact', (req, res) => {
+    const { name, email, birthday, interest, 'chess-experience': chessExperience, message } = req.body;
 
     const newContact = new Contact({
         name,
         email,
+        birthday,
+        interest,
+        chessExperience,
         message
     });
+
 
     newContact.save()
         .then(() => {
@@ -35,7 +38,7 @@ app.post('/testdb', (req, res) => {
         });
 });
 
-// Start the server
+// Start server
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });

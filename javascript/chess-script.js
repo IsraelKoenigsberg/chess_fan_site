@@ -41,11 +41,13 @@ $(document).ready(function () {
         $(".piece-info").html("<p>Chess originated in India in the 6th century. The game has evolved over centuries and is now one of the most popular board games in the world.</p>");
     });
 
-    // Contact Form Validation (if necessary)
+    // Contact Form Validation 
     $('#contact-form').submit(function (event) {
+        event.preventDefault(); // Prevent default form submission!
+
         // Reset previous error styles
         $('.error').remove();
-        $('input, select, textarea').css('border', '1px solid #ccc'); // Reset border color
+        $('input, select, textarea').css('border', '1px solid #ccc');
 
         var isValid = true;
 
@@ -82,13 +84,10 @@ $(document).ready(function () {
             $('#message').after('<div class="error">Message is required</div>');
         }
 
-        // If everything is valid, refresh the page (or submit the form)
+        // If everything is valid, submit the form
         if (isValid) {
-            // Refresh the page
-            location.reload();
+            $('#contact-form')[0].submit(); // submit the form manually
         }
-
-        // Prevent form submission to allow validation
-        event.preventDefault();
     });
+
 });
