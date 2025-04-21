@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const Contact = require('./models/userModel');
 
 const app = express();
+const cors = require('cors');
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -35,6 +37,19 @@ app.post('/contact', (req, res) => {
         .catch((err) => {
             console.error('Error saving contact:', err);
             res.status(500).send('Error submitting form');
+        });
+});
+// GET contact by name
+app.get('/contact/:name', (req, res) => {
+    const nameToFind = req.params.name;
+
+    Contact.find({ name: nameToFind })
+        .then((results) => {
+            res.status(200).json(results);
+        })
+        .catch((err) => {
+            console.error('Error fetching contact:', err);
+            res.status(500).send('Error retrieving contact');
         });
 });
 

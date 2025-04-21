@@ -89,5 +89,42 @@ $(document).ready(function () {
             $('#contact-form')[0].submit(); // submit the form manually
         }
     });
+    // Contact page: Search contact by name
+    $('#search-btn').click(function () {
+        const searchName = $('#search-name').val().trim();
+        if (searchName === '') {
+            $('#search-results').html('<p>Please enter a name to search.</p>');
+            return;
+        }
 
+        $.ajax({
+            url: `http://localhost:3000/contact/${encodeURIComponent(searchName)}`,
+            method: 'GET',
+            success: function (data) {
+                if (data.length === 0) {
+                    $('#search-results').html('<p>No results found for that name.</p>');
+                } else {
+                    let output = '<h3>Search Results:</h3>';
+                    data.forEach(contact => {
+                        output += `
+                        <div class="search-result">
+                            <p><strong>Name:</strong> ${contact.name}</p>
+                            <p><strong>Email:</strong> ${contact.email}</p>
+                            <p><strong>Birthday:</strong> ${contact.birthday}</p>
+                            <p><strong>Interest:</strong> ${contact.interest}</p>
+                            <p><strong>Chess Experience:</strong> ${contact.chessExperience}</p>
+                            <p><strong>Message:</strong> ${contact.message}</p>
+                            <hr>
+                        </div>
+                    `;
+                    });
+                    $('#search-results').html(output);
+                }
+            },
+            error: function () {
+                $('#search-results').html('<p>There was an error retrieving the data.</p>');
+            }
+        });
+    });
 });
+

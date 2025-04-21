@@ -18,6 +18,7 @@
   "homepage": "https://github.com/IsraelKoenigsberg/chess_fan_site#readme",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "mongoose": "^8.13.2"
   }
 }
