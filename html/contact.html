@@ -12,6 +12,7 @@
 
     <!-- Slick Carousel JS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Page - Chess Basics</title>
@@ -19,7 +20,7 @@
     <script src="../javascript/chess-script.js"></script>
 </head>
 
-<body>
+<body class="chess-contact-ui">
     <nav>
         <button class="hamburger">&#9776;</button>
         <div class="nav-links">
@@ -62,7 +63,6 @@
             <label for="advanced">Advanced</label><br>
         </div>
 
-
         <div class="form-group">
             <label for="chess-experience">How long have you been playing chess?</label>
             <select id="chess-experience" name="chess-experience">
@@ -81,19 +81,31 @@
 
         <button type="submit" id="submit-btn">Submit</button>
     </form>
+
     <hr>
-    <h2>Search Contact by Name</h2>
-    <div class="form-group">
-        <label for="search-name">Enter Full Name:</label>
-        <input type="text" id="search-name">
-        <button type="button" id="search-btn">Search</button>
+
+    <div class="flex-container">
+        <!-- Search Section -->
+        <div class="form-box">
+            <h2>Search Contact by Name</h2>
+            <div class="form-group">
+                <label for="search-name">Enter Full Name:</label>
+                <input type="text" id="search-name">
+                <button type="button" id="search-btn">Search</button>
+            </div>
+            <div id="search-results"></div>
+        </div>
+
+        <!-- Delete Section -->
+        <div class="form-box">
+            <h2>Delete Contact by Name</h2>
+            <div class="form-group">
+                <label for="delete-name">Enter Full Name:</label>
+                <input type="text" id="delete-name">
+                <button type="button" id="delete-btn">Delete</button>
+            </div>
+            <div id="delete-results"></div>
+        </div>
     </div>
 
-    <div id="search-results"></div>
-
-
     <div id="status-message"></div>
-
-</body>
-
-</html>

@@ -52,6 +52,23 @@ app.get('/contact/:name', (req, res) => {
             res.status(500).send('Error retrieving contact');
         });
 });
+// DELETE contact by name (delete the first match)
+app.delete('/contact/:name', (req, res) => {
+    const nameToDelete = req.params.name;
+
+    Contact.findOneAndDelete({ name: nameToDelete })
+        .then((deletedDoc) => {
+            if (!deletedDoc) {
+                return res.status(404).send('No contact found with that name.');
+            }
+            res.status(200).send('Contact deleted successfully.');
+        })
+        .catch((err) => {
+            console.error('Error deleting contact:', err);
+            res.status(500).send('Error deleting contact');
+        });
+});
+
 
 // Start server
 app.listen(3000, () => {
