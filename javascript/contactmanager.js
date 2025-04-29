@@ -10,7 +10,7 @@ document.getElementById('add-contact-form').addEventListener('submit', async (e)
         message: e.target.message.value
     };
 
-    const response = await fetch('http://localhost:3000/api/contacts', {
+    const response = await fetch('http://localhost:3000/api/mycontactinfo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(contactData)
@@ -23,7 +23,7 @@ document.getElementById('add-contact-form').addEventListener('submit', async (e)
 // Search Contact
 document.getElementById('search-btn').addEventListener('click', async () => {
     const name = document.getElementById('search-name').value;
-    const response = await fetch(`http://localhost:3000/api/contacts/${name}`);
+    const response = await fetch(`http://localhost:3000/api/mycontactinfo/${name}`);
     const contacts = await response.json();
     const resultsDiv = document.getElementById('search-results');
     resultsDiv.innerHTML = '';
@@ -51,9 +51,9 @@ document.getElementById('update-contact-form').addEventListener('submit', async 
     // If ID is provided, update by ID, otherwise update by name
     let url;
     if (id && id.trim() !== '') {
-        url = `http://localhost:3000/api/contacts/${id}`;
+        url = `http://localhost:3000/api/mycontactinfo/${id}`;
     } else if (name && name.trim() !== '') {
-        url = `http://localhost:3000/api/contacts/name/${name}`;
+        url = `http://localhost:3000/api/mycontactinfo/name/${name}`;
         // When updating by name, don't include name in the update data
         delete updatedData.name;
     } else {
@@ -79,9 +79,9 @@ document.getElementById('delete-btn').addEventListener('click', async () => {
 
     let url;
     if (id && id.trim() !== '') {
-        url = `http://localhost:3000/api/contacts/${id}`;
+        url = `http://localhost:3000/api/mycontactinfo/${id}`;
     } else {
-        url = `http://localhost:3000/api/contacts/name/${name}`;
+        url = `http://localhost:3000/api/mycontactinfo/name/${name}`;
     }
 
     const response = await fetch(url, {

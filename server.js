@@ -9,10 +9,9 @@ const PORT = 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
 
 // Routes
-app.use('/api/contacts', contactRoutes);
+app.use('/api/mycontactinfo', contactRoutes);
 
 // MongoDB Connection
 mongoose.connect('mongodb+srv://yisraelkoenigsberg:VkhPXBb1J7XAVWv6@cluster0.wbu0e35.mongodb.net/UserInformation?retryWrites=true&w=majority', {

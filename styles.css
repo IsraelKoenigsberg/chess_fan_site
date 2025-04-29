@@ -358,3 +358,42 @@ button:hover {
     flex: 1;
     min-width: 280px;
 }
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 40px;
+    max-width: 800px;
+    margin: auto;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    text-align: center;
+}
+
+form,
+.search,
+.delete {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+input,
+textarea,
+button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#search-results {
+    background: white;
+    padding: 10px;
+    border-radius: 6px;
+}
