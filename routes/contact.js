@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Contact = require('../models/contact'); // Assuming you have a Contact model
+const Contact = require('../models/contactmodel');
+const cors = require('cors');
 
 // POST - Add Contact
 router.post('/', async (req, res) => {

@@ -2,12 +2,27 @@
 <html lang="en">
 
 <head>
+
+
     <meta charset="UTF-8" />
-    <title>Contact Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Management - Chess Basics</title>
     <link rel="stylesheet" href="../styles.css" />
+    <script src="../javascript/chess-script.js"></script>
 </head>
 
-<body>
+<body class="chess-contact-ui">
+    <!-- Navigation -->
+    <nav>
+        <button class="hamburger">&#9776;</button>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="about.html" class="nav-link">About Chess</a>
+            <a href="mycontactinfo.html" class="nav-link">My Contact Info</a>
+            <a href="profile.html" class="nav-link">See Profiles</a>
+        </div>
+    </nav>
+
     <h1>Contact Management</h1>
 
     <!-- Add Contact Form -->
@@ -51,6 +66,9 @@
         <button id="delete-btn">Delete</button>
     </div>
 
+    <div id="status-message"></div>
+
+    <!-- Contact Manager Script -->
     <script src="../javascript/contactmanager.js"></script>
 </body>
 
