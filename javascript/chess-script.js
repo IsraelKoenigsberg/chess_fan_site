@@ -1,3 +1,47 @@
+// Add this to the beginning of your existing chess-script.js
+// or include as a separate script in your HTML
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Check if user is authenticated
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+        // If no token found, redirect to login page
+        window.location.href = 'login.html';
+    }
+
+    // If you want to display user info on the page
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+    // Optional: Add a logout button to the navigation
+    const navLinks = document.querySelector('.nav-links');
+    if (navLinks) {
+        const logoutLink = document.createElement('a');
+        logoutLink.href = '#';
+        logoutLink.className = 'nav-link';
+        logoutLink.textContent = 'Logout';
+        logoutLink.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            // Clear authentication data
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+
+            // Redirect to login page
+            window.location.href = 'login.html';
+        });
+
+        navLinks.appendChild(logoutLink);
+    }
+
+    // Optional: Display welcome message with user's name
+    if (user && user.firstname) {
+        const h1 = document.querySelector('h1');
+        if (h1) {
+            h1.textContent = `Welcome to Chess Basics, ${user.firstname}!`;
+        }
+    }
+});
 $(document).ready(function () {
     console.log("jQuery is working!");  // Check if jQuery is loaded
 
