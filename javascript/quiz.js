@@ -1,55 +1,97 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Check if user is authenticated
-    const token = localStorage.getItem('authToken');
-    if (!token) {
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if user is logged in with token
+    const authToken = localStorage.getItem('authToken');
+
+    if (!authToken) {
+        // If authentication data is missing, redirect to login page
+        alert('Please log in to take the quiz');
         window.location.href = 'login.html';
         return;
     }
 
-    // Get user info
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    let userAnswers = Array(10).fill(undefined); // Initialize with 10 undefined answers
+    let score = 0;
+
+    const quizForm = document.getElementById('quiz-form');
+    const questionsContainer = document.getElementById('questions-container');
+    const resultContainer = document.getElementById('result-container');
+    const scoreElement = document.getElementById('score');
+    const feedbackElement = document.getElementById('feedback');
+    const tryAgainButton = document.getElementById('try-again');
+    const goHomeButton = document.getElementById('go-home');
+    const currentScoreElement = document.getElementById('current-score');
 
     // Quiz questions
-    const quizQuestions = [
+    const questions = [
         {
             question: "How does the Knight move in chess?",
             options: [
-                "In a straight line only",
-                "Diagonally any number of squares",
-                "In an L-shape: 2 squares in one direction and then 1 square perpendicular",
-                "1 square in any direction"
+                "In a straight line",
+                "Diagonally",
+                "In an L-shape",
+                "One square in any direction"
             ],
-            correctAnswer: 2 // Index of the correct answer (0-based)
+            correctAnswer: 2
         },
         {
             question: "Which piece can only move diagonally?",
             options: [
                 "Rook",
                 "Bishop",
-                "Queen",
-                "Pawn"
+                "Knight",
+                "Queen"
             ],
             correctAnswer: 1
         },
         {
             question: "What is 'castling' in chess?",
             options: [
-                "Promoting a pawn to a higher-value piece",
                 "A special move involving the king and a rook",
-                "Putting the opponent's king in check",
-                "Capturing the opponent's queen"
+                "Capturing an opponent's king",
+                "Promoting a pawn to a queen",
+                "A defensive formation"
             ],
-            correctAnswer: 1
+            correctAnswer: 0
         },
         {
             question: "Which piece can jump over other pieces?",
             options: [
                 "Queen",
-                "Bishop",
                 "Knight",
+                "Bishop",
                 "Rook"
             ],
+            correctAnswer: 1
+        },
+        {
+            question: "When does a chess game end in a stalemate?",
+            options: [
+                "When a player's king is captured",
+                "When both players agree to a draw",
+                "When a player has no legal moves and their king is not in check",
+                "When only kings remain on the board"
+            ],
             correctAnswer: 2
+        },
+        {
+            question: "What is 'en passant' in chess?",
+            options: [
+                "A defensive strategy",
+                "A special pawn capture move",
+                "A method of queenside castling",
+                "A way to promote pawns"
+            ],
+            correctAnswer: 1
+        },
+        {
+            question: "What is the name of the starting position on a chess board?",
+            options: [
+                "Standard position",
+                "Initial setup",
+                "Opening stance",
+                "Starting position"
+            ],
+            correctAnswer: 0
         },
         {
             question: "How many squares are on a standard chess board?",
@@ -62,254 +104,178 @@ document.addEventListener('DOMContentLoaded', function () {
             correctAnswer: 1
         },
         {
-            question: "What is 'en passant' in chess?",
+            question: "Which piece is considered the most valuable (apart from the king)?",
             options: [
-                "A special pawn capture move",
-                "When a king is in check",
-                "A draw by agreement",
-                "When a player resigns"
+                "Queen",
+                "Rook",
+                "Bishop",
+                "Knight"
             ],
             correctAnswer: 0
         },
         {
-            question: "How does a pawn capture pieces?",
+            question: "What is the only piece that can 'promote' in chess?",
             options: [
-                "In the same way it moves - straight ahead",
-                "It cannot capture pieces",
-                "Diagonally forward one square",
-                "In any direction one square"
+                "Knight",
+                "Bishop",
+                "Pawn",
+                "Rook"
             ],
             correctAnswer: 2
-        },
-        {
-            question: "What happens when a pawn reaches the opposite end of the board?",
-            options: [
-                "It is removed from the board",
-                "It can move backwards",
-                "It can be promoted to any piece except a king",
-                "Nothing happens"
-            ],
-            correctAnswer: 2
-        },
-        {
-            question: "What is checkmate?",
-            options: [
-                "When a king is attacked but can escape",
-                "When a king is attacked and cannot escape",
-                "When no legal moves are available (stalemate)",
-                "When both players agree to a draw"
-            ],
-            correctAnswer: 1
-        },
-        {
-            question: "Which of these is NOT a way a chess game can end?",
-            options: [
-                "Checkmate",
-                "Stalemate",
-                "Resignation",
-                "Capturing all pieces except the king"
-            ],
-            correctAnswer: 3
         }
     ];
 
-    // Elements
-    const questionsContainer = document.getElementById('questions-container');
-    const currentQuestionSpan = document.getElementById('current-question');
-    const currentScoreSpan = document.getElementById('current-score');
-    const quizForm = document.getElementById('quiz-form');
-    const resultContainer = document.getElementById('result-container');
-    const scoreElement = document.getElementById('score');
-    const feedbackElement = document.getElementById('feedback');
-    const tryAgainButton = document.getElementById('try-again');
-    const goHomeButton = document.getElementById('go-home');
+    function displayAllQuestions() {
+        questionsContainer.innerHTML = ''; // Clear container
 
-    // Track user answers and score
-    let userAnswers = [];
-    let score = 0;
+        // Create and append each question
+        questions.forEach((question, questionIndex) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-container';
 
-    // Load questions
-    function loadQuestions() {
-        questionsContainer.innerHTML = ''; // Clear previous questions
+            questionDiv.innerHTML = `
+                <div class="question">${questionIndex + 1}. ${question.question}</div>
+                <div class="options">
+                    ${question.options.map((option, optionIndex) => `
+                        <div class="option">
+                            <input type="radio" id="q${questionIndex}o${optionIndex}" name="q${questionIndex}" value="${optionIndex}" ${userAnswers[questionIndex] === optionIndex ? 'checked' : ''}>
+                            <label for="q${questionIndex}o${optionIndex}">${option}</label>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
 
-        quizQuestions.forEach((questionData, index) => {
-            // Create question container
-            const questionContainer = document.createElement('div');
-            questionContainer.className = 'question-container';
-            questionContainer.id = `question-${index}`;
+            questionsContainer.appendChild(questionDiv);
 
-            // Create question text
-            const questionText = document.createElement('div');
-            questionText.className = 'question';
-            questionText.textContent = `${index + 1}. ${questionData.question}`;
+            // Add event listeners to option radio buttons
+            question.options.forEach((_, optionIndex) => {
+                const radio = document.getElementById(`q${questionIndex}o${optionIndex}`);
+                if (radio) {
+                    radio.addEventListener('change', () => {
+                        userAnswers[questionIndex] = optionIndex;
+                        console.log(`Answer for question ${questionIndex + 1} set to: ${optionIndex}`);
 
-            // Create options
-            const optionsContainer = document.createElement('div');
-            optionsContainer.className = 'options';
-
-            questionData.options.forEach((option, optionIndex) => {
-                const optionDiv = document.createElement('label');
-                optionDiv.className = 'option';
-
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = `question-${index}`;
-                radio.value = optionIndex;
-                radio.required = true;
-                radio.addEventListener('change', () => {
-                    // Update user answer when option is selected
-                    userAnswers[index] = optionIndex;
-                    updateProgress();
-                });
-
-                const optionText = document.createTextNode(option);
-
-                optionDiv.appendChild(radio);
-                optionDiv.appendChild(optionText);
-                optionsContainer.appendChild(optionDiv);
+                        // Update the score
+                        calculateScore();
+                        currentScoreElement.textContent = score;
+                    });
+                }
             });
-
-            // Append elements to question container
-            questionContainer.appendChild(questionText);
-            questionContainer.appendChild(optionsContainer);
-
-            // Append question to questions container
-            questionsContainer.appendChild(questionContainer);
         });
-
-        // Initialize user answers array
-        userAnswers = new Array(quizQuestions.length).fill(null);
     }
 
-    // Update progress display
-    function updateProgress() {
-        // Count answered questions
-        const answeredQuestions = userAnswers.filter(answer => answer !== null).length;
-        currentQuestionSpan.textContent = answeredQuestions;
-
-        // Calculate current score
-        score = calculateScore();
-        currentScoreSpan.textContent = score;
-    }
-
-    // Calculate score based on user answers
     function calculateScore() {
-        let correctAnswers = 0;
-
+        score = 0;
         userAnswers.forEach((answer, index) => {
-            if (answer === quizQuestions[index].correctAnswer) {
-                correctAnswers++;
+            if (answer === questions[index].correctAnswer) {
+                score++;
             }
         });
-
-        return correctAnswers;
+        return score;
     }
 
-    // Submit quiz results to server
-    async function submitQuizResults(finalScore) {
-        try {
-            const token = localStorage.getItem('authToken');
+    function showResult() {
+        quizForm.style.display = 'none';
+        resultContainer.style.display = 'block';
 
-            // Prepare detailed answers data
-            const detailedAnswers = quizQuestions.map((question, index) => {
-                return {
-                    question: question.question,
-                    userAnswer: userAnswers[index] !== null ? question.options[userAnswers[index]] : null,
-                    correctAnswer: question.options[question.correctAnswer],
-                    isCorrect: userAnswers[index] === question.correctAnswer
-                };
-            });
+        const finalScore = calculateScore();
+        scoreElement.textContent = `Your score: ${finalScore}/${questions.length}`;
+
+        // Generate feedback based on score
+        if (finalScore === questions.length) {
+            feedbackElement.textContent = "Perfect! You're a chess master!";
+        } else if (finalScore >= questions.length * 0.8) {
+            feedbackElement.textContent = "Excellent! You have a strong understanding of chess!";
+        } else if (finalScore >= questions.length * 0.6) {
+            feedbackElement.textContent = "Good job! You know the basics of chess well.";
+        } else if (finalScore >= questions.length * 0.4) {
+            feedbackElement.textContent = "Not bad! With a little more practice, you'll improve your chess knowledge.";
+        } else {
+            feedbackElement.textContent = "Keep learning! Chess takes time to master.";
+        }
+
+        // Submit the quiz result to the server
+        submitQuizResult(finalScore, questions.length, userAnswers);
+    }
+
+    async function submitQuizResult(score, totalQuestions, answers) {
+        try {
+            console.log('Submitting quiz results...');
+            console.log('Using token (first few chars):', authToken.substring(0, 10) + '...');
 
             const response = await fetch('http://localhost:3000/api/quiz/submit', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
                 },
                 body: JSON.stringify({
-                    score: finalScore,
-                    totalQuestions: quizQuestions.length,
-                    answers: detailedAnswers
+                    score,
+                    totalQuestions,
+                    answers: answers.map((answer, index) => ({
+                        question: questions[index].question,
+                        answer: answer !== undefined ? questions[index].options[answer] : "Not answered",
+                        correct: answer === questions[index].correctAnswer
+                    }))
                 })
             });
 
-            if (response.ok) {
-                console.log('Quiz results submitted successfully');
-                return true;
-            } else {
-                console.error('Failed to submit quiz results');
-                return false;
+            const data = await response.json();
+            console.log('Quiz submission response:', data);
+
+            if (!response.ok) {
+                console.error('Failed to submit quiz:', data.message);
+
+                // Handle token issues
+                if (response.status === 401) {
+                    alert('Your session has expired. Please log in again.');
+                    localStorage.removeItem('authToken');
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Failed to submit quiz. ' + (data.message || 'Please try again later.'));
+                }
             }
         } catch (error) {
-            console.error('Error submitting quiz results:', error);
-            return false;
+            console.error('Error submitting quiz:', error);
+            alert('Error submitting quiz. Please check your connection and try again.');
         }
     }
 
-    // Display results
-    function showResults() {
-        const finalScore = calculateScore();
-        const percentage = (finalScore / quizQuestions.length) * 100;
+    // Initialize the quiz by displaying all questions
+    displayAllQuestions();
 
-        scoreElement.textContent = `Your score: ${finalScore}/${quizQuestions.length} (${percentage}%)`;
-
-        // Custom feedback based on score
-        if (percentage >= 90) {
-            feedbackElement.textContent = "Excellent! You're a chess master in the making!";
-        } else if (percentage >= 70) {
-            feedbackElement.textContent = "Great job! You have a solid understanding of chess rules.";
-        } else if (percentage >= 50) {
-            feedbackElement.textContent = "Good effort! You know the basics, but there's room to improve.";
-        } else {
-            feedbackElement.textContent = "Keep practicing! Chess takes time to master.";
-        }
-
-        // Submit results to server
-        submitQuizResults(finalScore);
-
-        // Hide quiz, show results
-        quizForm.style.display = 'none';
-        resultContainer.style.display = 'block';
-    }
-
-    // Handle form submission
-    quizForm.addEventListener('submit', function (e) {
+    // Quiz form submission
+    quizForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        // Check if all questions are answered
-        const unansweredQuestions = userAnswers.filter(answer => answer === null).length;
+        // Check if all questions have been answered
+        const unansweredQuestions = [];
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] === undefined) {
+                unansweredQuestions.push(i + 1);
+            }
+        }
 
-        if (unansweredQuestions > 0) {
-            alert(`Please answer all questions. You have ${unansweredQuestions} unanswered questions.`);
+        if (unansweredQuestions.length > 0) {
+            alert(`Please answer question(s): ${unansweredQuestions.join(', ')}`);
             return;
         }
 
-        showResults();
+        showResult();
     });
 
     // Try again button
-    tryAgainButton.addEventListener('click', function () {
-        // Reset quiz
-        userAnswers = new Array(quizQuestions.length).fill(null);
+    tryAgainButton.addEventListener('click', () => {
+        userAnswers = Array(10).fill(undefined);
         score = 0;
-
-        // Update display
-        currentQuestionSpan.textContent = '0';
-        currentScoreSpan.textContent = '0';
-
-        // Reset form and reload questions
-        loadQuestions();
-
-        // Hide results, show quiz
+        currentScoreElement.textContent = 0;
+        displayAllQuestions();
         resultContainer.style.display = 'none';
         quizForm.style.display = 'block';
     });
 
     // Go home button
-    goHomeButton.addEventListener('click', function () {
+    goHomeButton.addEventListener('click', () => {
         window.location.href = 'index.html';
     });
-
-    // Initialize quiz
-    loadQuestions();
 });

@@ -7,13 +7,21 @@
     <title>Chess Basics - Quiz</title>
     <link rel="stylesheet" href="../styles.css">
     <style>
+        body {
+            background-color: #f5f5f5;
+        }
+
         .quiz-container {
             max-width: 800px;
-            margin: 50px auto;
+            margin: 30px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .intro {
+            margin-bottom: 30px;
         }
 
         .question-container {
@@ -21,12 +29,20 @@
             padding: 15px;
             background-color: #f8f9fa;
             border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            transition: all 0.3s ease;
+        }
+
+        .question-container:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .question {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
+            color: #333;
         }
 
         .options {
@@ -38,7 +54,7 @@
         .option {
             display: flex;
             align-items: center;
-            padding: 10px;
+            padding: 10px 15px;
             border: 1px solid #ddd;
             border-radius: 5px;
             cursor: pointer;
@@ -53,6 +69,11 @@
             margin-right: 10px;
         }
 
+        .option label {
+            flex: 1;
+            cursor: pointer;
+        }
+
         .submit-btn {
             background-color: #4CAF50;
             color: white;
@@ -62,8 +83,9 @@
             cursor: pointer;
             font-size: 16px;
             display: block;
-            margin: 20px auto 0;
+            margin: 30px auto 10px;
             width: 200px;
+            transition: background-color 0.3s;
         }
 
         .submit-btn:hover {
@@ -73,26 +95,29 @@
         .result-container {
             text-align: center;
             display: none;
-            padding: 20px;
+            padding: 30px;
             margin-top: 20px;
             background-color: #e8f5e9;
             border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .score {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            color: #1b5e20;
         }
 
         .back-btn {
             background-color: #2196F3;
             color: white;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 15px;
+            margin: 15px 10px;
+            transition: background-color 0.3s;
         }
 
         .back-btn:hover {
@@ -103,10 +128,21 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            padding: 10px 15px;
+            background-color: #f1f8e9;
+            border-radius: 6px;
         }
 
         .progress-text {
             font-weight: bold;
+            color: #388e3c;
+        }
+
+        .quiz-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -119,18 +155,21 @@
             <a href="about.html" class="nav-link">About Chess</a>
             <a href="mycontactinfo.html" class="nav-link">My Contact Info</a>
             <a href="profile.html" class="nav-link">See Profiles</a>
-            <a href="quiz.html" class="nav-link">Chess Quiz</a>
+            <a href="quiz.html" class="nav-link">Take Quiz</a>
         </div>
     </nav>
 
     <div class="quiz-container">
-        <h1>Test Your Chess Knowledge</h1>
-        <p>Welcome to the Chess Basics quiz! This 10-question quiz will test your knowledge of basic chess rules, piece
-            movements, and game concepts. Good luck!</p>
+        <div class="intro">
+            <h1>Test Your Chess Knowledge</h1>
+            <p>Welcome to the Chess Basics quiz! This 10-question quiz will test your knowledge of basic chess rules,
+                piece
+                movements, and game concepts. Answer all questions and submit to see your score. Good luck!</p>
+        </div>
 
         <div class="progress">
-            <span class="progress-text">Question: <span id="current-question">1</span>/10</span>
-            <span class="progress-text">Score: <span id="current-score">0</span>/10</span>
+            <span class="progress-text">Total Questions: 10</span>
+            <span class="progress-text">Current Score: <span id="current-score">0</span>/10</span>
         </div>
 
         <form id="quiz-form">
@@ -145,13 +184,19 @@
             <h2>Quiz Results</h2>
             <div id="score" class="score">Your score: 0/10</div>
             <p id="feedback">Thank you for taking the quiz!</p>
-            <button id="try-again" class="back-btn">Try Again</button>
-            <button id="go-home" class="back-btn">Back to Home</button>
+            <div>
+                <button id="try-again" class="back-btn">Try Again</button>
+                <button id="go-home" class="back-btn">Back to Home</button>
+            </div>
+        </div>
+
+        <div class="quiz-footer">
+            <p>© 2025 Chess Basics. All questions are based on standard chess rules.</p>
         </div>
     </div>
 
     <script src="../javascript/quiz.js"></script>
-    <script src="../../javascript/authcheck.js"></script>
+    <script src="../javascript/authcheck.js"></script>
 </body>
 
 </html>

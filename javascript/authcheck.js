@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const token = localStorage.getItem('authToken');
 
     if (!token) {
-        // If no token found, redirect to login page
+        // If token is missing, redirect to login page
+        console.log('Authentication required. Redirecting to login.');
         window.location.href = 'login.html';
         return;
     }

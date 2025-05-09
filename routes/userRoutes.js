@@ -1,22 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
+const User = require('../models/loginmodel');
 const router = express.Router();
 
-// Use a simple JWT secret for now - in production, use environment variables
-const JWT_SECRET = 'your-secret-key';
-
-// User schema
-const UserSchema = new mongoose.Schema({
-    firstname: { type: String, required: true },
-    lastname: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
-}, { timestamps: true });
-
-const User = mongoose.model('User', UserSchema);
+const JWT_SECRET = 'chess_basics_secure_jwt_secret';
 
 // User registration
 router.post('/register', async (req, res) => {
@@ -119,10 +107,12 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign(
             { userId: user._id.toString() },
             JWT_SECRET,
-            { expiresIn: '1h' } // 1 hour expiration
+            { expiresIn: '24h' } // 24 hour expiration
         );
 
         console.log('Login successful for user:', username);
+        console.log('Token generated. First 20 chars:', token.substring(0, 20) + '...');
+
         res.status(200).json({
             message: 'Login successful',
             token,
@@ -150,19 +140,25 @@ router.get('/profile', async (req, res) => {
         }
 
         const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, JWT_SECRET);
 
-        const user = await User.findById(decoded.userId);
+        try {
+            const decoded = jwt.verify(token, JWT_SECRET);
 
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            const user = await User.findById(decoded.userId);
+
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            // Convert to object to remove password
+            const userObject = user.toObject();
+            delete userObject.password;
+
+            res.status(200).json(userObject);
+        } catch (jwtError) {
+            console.error('JWT verification error:', jwtError);
+            return res.status(401).json({ message: 'Invalid or expired token' });
         }
-
-        // Convert to object to remove password
-        const userObject = user.toObject();
-        delete userObject.password;
-
-        res.status(200).json(userObject);
     } catch (error) {
         console.error('Profile access error:', error);
         res.status(401).json({ message: 'Invalid or expired token' });

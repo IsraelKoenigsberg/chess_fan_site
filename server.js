@@ -24,8 +24,7 @@ mongoose.connect('mongodb+srv://yisraelkoenigsberg:VkhPXBb1J7XAVWv6@cluster0.wbu
 // Import routes
 const contactRoutes = require('./routes/contact');
 const userRoutes = require('./routes/userRoutes');
-// Add other routes if needed
-// const quizRoutes = require('./routes/quizRoutes');
+const quizRoutes = require('./routes/quizRoutes');
 
 // Request logger
 app.use((req, res, next) => {
@@ -36,7 +35,7 @@ app.use((req, res, next) => {
 // Use routes
 app.use('/api/mycontactinfo', contactRoutes);
 app.use('/api/users', userRoutes);
-// app.use('/api/quiz', quizRoutes);
+app.use('/api/quiz', quizRoutes);
 
 // Default route - serve index.html
 app.get('/', (req, res) => {
@@ -50,6 +49,10 @@ app.get('/index.html', (req, res) => {
 
 app.get('/login.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'login.html'));
+});
+
+app.get('/quiz.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'quiz.html'));
 });
 
 // Handle 404 errors - IMPORTANT: Return JSON for 404s

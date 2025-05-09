@@ -1,13 +1,14 @@
-// Chess quiz routes with authentication
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import { ObjectId } from 'mongodb';
-import dotenv from 'dotenv';
-import connectDB from '../javascript/databaseconnection.js';
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const User = require('../models/loginmodel'); // Import the User model
+const QuizResult = require('../models/quizmodel'); // Import the QuizResult model
+const ObjectId = mongoose.Types.ObjectId;
 
-dotenv.config();
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+
+// Use the same JWT secret as in userRoutes.js
+const JWT_SECRET = 'chess_basics_secure_jwt_secret';
 
 // Authentication middleware
 const authenticateUser = (req, res, next) => {
@@ -20,9 +21,11 @@ const authenticateUser = (req, res, next) => {
         }
 
         const token = authHeader.split(' ')[1];
+        console.log('Verifying token. First 20 chars:', token.substring(0, 20) + '...');
 
-        // Verify token
+        // Verify token with the server's secret
         const decoded = jwt.verify(token, JWT_SECRET);
+        console.log('Token verified successfully, user ID:', decoded.userId);
 
         // Add user ID to request object
         req.userId = decoded.userId;
@@ -32,21 +35,16 @@ const authenticateUser = (req, res, next) => {
         if (error.name === 'TokenExpiredError') {
             return res.status(401).json({ message: 'Token expired' });
         }
-        res.status(401).json({ message: 'Invalid token' });
+        res.status(401).json({ message: 'Invalid token: ' + error.message });
     }
 };
 
 // Get all quiz results for the authenticated user
 router.get('/', authenticateUser, async (req, res) => {
     try {
-        const db = await connectDB();
-        const quizResults = db.collection('quizResults');
-
         // Find quiz results for the specific user
-        const userQuizResults = await quizResults
-            .find({ userId: req.userId })
-            .sort({ createdAt: -1 })
-            .toArray();
+        const userQuizResults = await QuizResult.find({ userId: req.userId })
+            .sort({ createdAt: -1 });
 
         res.status(200).json(userQuizResults);
     } catch (error) {
@@ -58,6 +56,7 @@ router.get('/', authenticateUser, async (req, res) => {
 // Submit a new quiz result
 router.post('/submit', authenticateUser, async (req, res) => {
     try {
+        console.log('Quiz submission received for user:', req.userId);
         const { score, totalQuestions, answers } = req.body;
 
         // Input validation
@@ -65,18 +64,17 @@ router.post('/submit', authenticateUser, async (req, res) => {
             return res.status(400).json({ message: 'Score and totalQuestions are required' });
         }
 
-        const db = await connectDB();
-
-        // Find user details from the users collection
-        const users = db.collection('users');
-        const user = await users.findOne({ _id: new ObjectId(req.userId) });
+        // Find user details using the User model
+        const user = await User.findById(req.userId);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Create new quiz result
-        const newQuizResult = {
+        console.log(`Quiz submitted by: ${user.username}, Score: ${score}/${totalQuestions}`);
+
+        // Create new quiz result using the imported model
+        const newQuizResult = new QuizResult({
             userId: req.userId,
             username: user.username,
             email: user.email,
@@ -87,82 +85,79 @@ router.post('/submit', authenticateUser, async (req, res) => {
             percentage: Math.round((Number(score) / Number(totalQuestions)) * 100),
             answers: answers || [],
             createdAt: new Date()
-        };
+        });
 
-        // Store quiz result in quizResults collection
-        const quizResults = db.collection('quizResults');
-        const result = await quizResults.insertOne(newQuizResult);
+        // Save the quiz result
+        const savedResult = await newQuizResult.save();
+        console.log('Quiz result saved with ID:', savedResult._id);
 
         // Now we need to update or create contact record
-        const contacts = db.collection('contacts');
+        const Contact = mongoose.model('Contact');
 
         // Check if contact already exists
-        const existingContact = await contacts.findOne({
+        const existingContact = await Contact.findOne({
             email: user.email,
-            firstname: user.firstname,
-            lastname: user.lastname
+            name: `${user.firstname} ${user.lastname}`
         });
 
         if (existingContact) {
             // Update existing contact with new quiz result
-            await contacts.updateOne(
-                { _id: existingContact._id },
-                {
-                    $set: {
-                        lastQuizScore: newQuizResult.score,
-                        lastQuizDate: newQuizResult.createdAt
-                    },
-                    $push: {
-                        quizHistory: {
-                            score: newQuizResult.score,
-                            date: newQuizResult.createdAt,
-                            percentage: newQuizResult.percentage
-                        }
-                    }
-                }
-            );
+            existingContact.lastQuizScore = newQuizResult.score;
+            existingContact.lastQuizDate = newQuizResult.createdAt;
+
+            // Add to quiz history if it doesn't exist
+            if (!existingContact.quizHistory) {
+                existingContact.quizHistory = [];
+            }
+
+            existingContact.quizHistory.push({
+                score: newQuizResult.score,
+                date: newQuizResult.createdAt,
+                percentage: newQuizResult.percentage
+            });
+
+            await existingContact.save();
+            console.log('Updated existing contact with quiz result');
         } else {
             // Create new contact with quiz result
-            await contacts.insertOne({
+            const newContact = new Contact({
+                name: `${user.firstname} ${user.lastname}`,
                 email: user.email,
-                firstname: user.firstname,
-                lastname: user.lastname,
                 lastQuizScore: newQuizResult.score,
                 lastQuizDate: newQuizResult.createdAt,
                 quizHistory: [{
                     score: newQuizResult.score,
                     date: newQuizResult.createdAt,
                     percentage: newQuizResult.percentage
-                }],
-                createdAt: new Date()
+                }]
             });
+
+            await newContact.save();
+            console.log('Created new contact with quiz result');
         }
 
         res.status(201).json({
             message: 'Quiz result submitted successfully',
-            resultId: result.insertedId,
+            resultId: savedResult._id,
             result: newQuizResult
         });
     } catch (error) {
         console.error('Error submitting quiz result:', error);
-        res.status(500).json({ message: 'Server error while submitting quiz result' });
+        res.status(500).json({ message: 'Server error while submitting quiz result', error: error.message });
     }
 });
 
 // Get a specific quiz result by ID
 router.get('/:id', authenticateUser, async (req, res) => {
     try {
-        const db = await connectDB();
-        const quizResults = db.collection('quizResults');
-
         // Validate quiz result ID
-        if (!ObjectId.isValid(req.params.id)) {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({ message: 'Invalid quiz result ID' });
         }
 
         // Find quiz result
-        const quizResult = await quizResults.findOne({
-            _id: new ObjectId(req.params.id),
+        const quizResult = await QuizResult.findOne({
+            _id: req.params.id,
             userId: req.userId
         });
 
@@ -177,4 +172,41 @@ router.get('/:id', authenticateUser, async (req, res) => {
     }
 });
 
-export default router;
+// Get user statistics
+router.get('/stats/summary', authenticateUser, async (req, res) => {
+    try {
+        // Find user's quiz results
+        const quizResults = await QuizResult.find({ userId: req.userId });
+
+        if (quizResults.length === 0) {
+            return res.status(200).json({
+                totalQuizzes: 0,
+                averageScore: 0,
+                bestScore: 0,
+                recentResults: []
+            });
+        }
+
+        // Calculate statistics
+        const totalQuizzes = quizResults.length;
+        const averageScore = quizResults.reduce((sum, quiz) => sum + quiz.percentage, 0) / totalQuizzes;
+        const bestScore = Math.max(...quizResults.map(quiz => quiz.percentage));
+
+        // Get most recent results (limited to 5)
+        const recentResults = await QuizResult.find({ userId: req.userId })
+            .sort({ createdAt: -1 })
+            .limit(5);
+
+        res.status(200).json({
+            totalQuizzes,
+            averageScore,
+            bestScore,
+            recentResults
+        });
+    } catch (error) {
+        console.error('Error fetching quiz statistics:', error);
+        res.status(500).json({ message: 'Server error while fetching quiz statistics' });
+    }
+});
+
+module.exports = router;

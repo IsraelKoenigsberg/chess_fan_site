@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const username = document.getElementById('loginUsername').value;
         const password = document.getElementById('loginPassword').value;
 
+        // Show loading message
+        loginMessage.textContent = 'Logging in...';
+        loginMessage.className = 'message';
+        loginMessage.style.display = 'block';
+
         try {
             console.log('Attempting login request...');
             // Use the full URL including protocol and port
@@ -44,11 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             console.log('Login response status:', response.status);
             const data = await response.json();
-            console.log('Login response data:', data);
+            console.log('Login response data received');
 
             if (response.ok) {
                 // Store token in localStorage
                 localStorage.setItem('authToken', data.token);
+
                 if (data.user) {
                     localStorage.setItem('user', JSON.stringify(data.user));
                 }
@@ -86,6 +92,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
+        // Show loading message
+        registerMessage.textContent = 'Creating account...';
+        registerMessage.className = 'message';
+        registerMessage.style.display = 'block';
+
         console.log('Register data:', { firstname, lastname, username, email });
 
         try {
@@ -113,6 +124,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 setTimeout(() => {
                     registerForm.style.display = 'none';
                     loginForm.style.display = 'block';
+                    // Clear register message when switching
+                    registerMessage.style.display = 'none';
                 }, 1000);
             } else {
                 registerMessage.textContent = data.message || 'Registration failed. Please try again.';
