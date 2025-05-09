@@ -3,11 +3,16 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
 
-// Load environment variables if needed
-// require('dotenv').config();
+// Load environment variables
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Failed to connect to MongoDB:', err));
 
 // Middleware
 app.use(cors());
@@ -16,10 +21,7 @@ app.use(express.json());
 // Serve static files from root directory
 app.use(express.static(path.join(__dirname)));
 
-// MongoDB Connection
-mongoose.connect('mongodb+srv://yisraelkoenigsberg:VkhPXBb1J7XAVWv6@cluster0.wbu0e35.mongodb.net/UserInformation?retryWrites=true&w=majority')
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Failed to connect to MongoDB:', err));
+
 
 // Import routes
 const contactRoutes = require('./routes/contact');

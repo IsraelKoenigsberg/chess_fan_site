@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/loginmodel');
 const router = express.Router();
 
-const JWT_SECRET = 'chess_basics_secure_jwt_secret';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // User registration
 router.post('/register', async (req, res) => {

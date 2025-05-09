@@ -7,8 +7,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const router = express.Router();
 
-// Use the same JWT secret as in userRoutes.js
-const JWT_SECRET = 'chess_basics_secure_jwt_secret';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Authentication middleware
 const authenticateUser = (req, res, next) => {
