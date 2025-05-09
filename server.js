@@ -1,87 +1,64 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import userRoutes from './routes/userRoutes.js';
-import quizRoutes from './routes/quizRoutes.js';
-import connectDB from './javascript/databaseconnection.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const path = require('path');
 
-// Get directory path for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Load environment variables
-dotenv.config();
-console.log('Environment variables loaded');
+// Load environment variables if needed
+// require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-console.log(`Server will run on port ${PORT}`);
-
-// Configure CORS to be more permissive
-app.use(cors({
-    origin: '*', // Allow all origins
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-console.log('CORS configured with permissive settings');
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 
-// Request logger middleware
+// Serve static files from root directory
+app.use(express.static(path.join(__dirname)));
+
+// MongoDB Connection
+mongoose.connect('mongodb+srv://yisraelkoenigsberg:VkhPXBb1J7XAVWv6@cluster0.wbu0e35.mongodb.net/UserInformation?retryWrites=true&w=majority')
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Failed to connect to MongoDB:', err));
+
+// Import routes
+const contactRoutes = require('./routes/contact');
+const userRoutes = require('./routes/userRoutes');
+// Add other routes if needed
+// const quizRoutes = require('./routes/quizRoutes');
+
+// Request logger
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
     next();
 });
 
-// Serve static files from root directory
-app.use(express.static(__dirname));
-console.log(`Static files being served from: ${__dirname}`);
-
-// API Routes
-console.log('Setting up API routes');
+// Use routes
+app.use('/api/mycontactinfo', contactRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/quiz', quizRoutes);
+// app.use('/api/quiz', quizRoutes);
 
-
-// Default route - login page
+// Default route - serve index.html
 app.get('/', (req, res) => {
-    console.log('Root route accessed, serving login.html');
-    res.sendFile('html/login.html', { root: __dirname });
+    res.sendFile(path.join(__dirname, 'html', 'login.html'));
 });
 
-// Handle 404 errors
+// Serve additional HTML files
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'index.html'));
+});
+
+app.get('/login.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'login.html'));
+});
+
+// Handle 404 errors - IMPORTANT: Return JSON for 404s
 app.use((req, res) => {
     console.log(`404 for URL: ${req.url}`);
-    res.status(404).send('Not found');
+    res.status(404).json({ error: 'Not found' });
 });
 
-// Handle server errors with detailed logging
-app.use((err, req, res, next) => {
-    console.error('Server error details:');
-    console.error(`Request URL: ${req.url}`);
-    console.error(`Request Method: ${req.method}`);
-    console.error(`Error Name: ${err.name}`);
-    console.error(`Error Message: ${err.message}`);
-    console.error(`Error Stack: ${err.stack}`);
-
-    res.status(500).json({
-        message: 'Server error occurred',
-        error: process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message
-    });
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
-
-// Start server only after DB connection
-console.log('Attempting to connect to database before starting server...');
-connectDB()
-    .then(() => {
-        app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-    })
-    .catch(err => {
-        console.error('Server failed to start due to database connection error:');
-        console.error(err);
-        process.exit(1);
-    });
