@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const User = require('../models/loginmodel'); // Import the User model
+const User = require('../models/loginmodel');
 const QuizResult = require('../models/quizmodel'); // Import the QuizResult model
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -90,7 +90,6 @@ router.post('/submit', authenticateUser, async (req, res) => {
         const savedResult = await newQuizResult.save();
         console.log('Quiz result saved with ID:', savedResult._id);
 
-        // Now we need to update or create contact record
         const Contact = mongoose.model('Contact');
 
         // Check if contact already exists

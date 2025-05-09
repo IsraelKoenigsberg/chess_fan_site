@@ -43,7 +43,7 @@ $(document).ready(function () {
 
     // Contact Form Validation 
     $('#contact-form').submit(function (event) {
-        event.preventDefault(); // Prevent default form submission!
+        event.preventDefault(); // Prevent default form submission
 
         // Reset previous error styles
         $('.error').remove();

@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             console.log('Attempting login request...');
-            // Use the full URL including protocol and port
             const response = await fetch('http://localhost:3000/api/users/login', {
                 method: 'POST',
                 headers: {
@@ -101,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             console.log('Attempting registration request...');
-            // Use the full URL including protocol and port
             const response = await fetch('http://localhost:3000/api/users/register', {
                 method: 'POST',
                 headers: {

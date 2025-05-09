@@ -39,12 +39,10 @@ app.use('/api/mycontactinfo', contactRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/quiz', quizRoutes);
 
-// Default route - serve index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'login.html'));
 });
 
-// Serve additional HTML files
 app.get('/index.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'index.html'));
 });
@@ -57,7 +55,6 @@ app.get('/quiz.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'quiz.html'));
 });
 
-// Handle 404 errors - IMPORTANT: Return JSON for 404s
 app.use((req, res) => {
     console.log(`404 for URL: ${req.url}`);
     res.status(404).json({ error: 'Not found' });

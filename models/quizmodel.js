@@ -4,7 +4,7 @@ const QuizResultSchema = new mongoose.Schema({
     userId: {
         type: String,
         required: true,
-        index: true // Add index for faster queries by userId
+        index: true
     },
     username: {
         type: String,
@@ -45,7 +45,6 @@ const QuizResultSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-// Add a compound index for userId and createdAt for efficient user history queries
 QuizResultSchema.index({ userId: 1, createdAt: -1 });
 
 module.exports = mongoose.model('QuizResult', QuizResultSchema);
