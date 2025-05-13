@@ -164,7 +164,6 @@ router.get('/profile', async (req, res) => {
         res.status(401).json({ message: 'Invalid or expired token' });
     }
 });
-// Add this route to userRoutes.js
 router.post('/profile-by-credentials', async (req, res) => {
     console.log('Profile by credentials endpoint called');
     try {
