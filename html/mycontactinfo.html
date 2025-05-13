@@ -2,8 +2,6 @@
 <html lang="en">
 
 <head>
-
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact Management - Chess Basics</title>
@@ -11,70 +9,171 @@
     <script src="../javascript/authcheck.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../javascript/chess-script.js"></script>
-
-
 </head>
 
-<!-- Navigation -->
-<nav>
-    <button class="hamburger">&#9776;</button>
-    <div class="nav-links">
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="about.html" class="nav-link">About Chess</a>
-        <a href="mycontactinfo.html" class="nav-link">My Contact Info</a>
-        <a href="profile.html" class="nav-link">See Profiles</a>
-        <a href="gamerules.html" class="nav-link">Game Rules</a>
-        <a href="quiz.html" class="nav-link">Take Quiz</a>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <button class="hamburger">&#9776;</button>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="about.html" class="nav-link">About Chess</a>
+            <a href="mycontactinfo.html" class="nav-link">My Contact Info</a>
+            <a href="profile.html" class="nav-link">See Profiles</a>
+            <a href="gamerules.html" class="nav-link">Game Rules</a>
+            <a href="quiz.html" class="nav-link">Take Quiz</a>
+        </div>
+    </nav>
+
+    <!-- Admin Password Overlay -->
+    <div id="admin-overlay" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    ">
+        <div class="about-container" style="max-width: 400px; text-align: center;">
+            <h2 style="color: #333; margin-bottom: 20px;">🔒 Admin Access Required</h2>
+            <p style="color: #666; margin-bottom: 20px;">Enter the admin password to access contact management:</p>
+            <form id="admin-password-form">
+                <input type="password" id="admin-password" placeholder="Enter admin password"
+                    style="width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #ddd; border-radius: 5px;"
+                    required />
+                <button type="submit" style="
+                    background-color: #008cba;
+                    color: white;
+                    padding: 12px 24px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    width: 100%;
+                    font-size: 16px;
+                ">Access Contact Management</button>
+            </form>
+            <div id="password-error" style="
+                color: #721c24;
+                background-color: #f8d7da;
+                border: 1px solid #f5c6cb;
+                padding: 10px;
+                border-radius: 5px;
+                margin-top: 15px;
+                display: none;
+            ">
+                Incorrect password. Please try again.
+            </div>
+        </div>
     </div>
-</nav>
 
-<h1>Contact Management</h1>
+    <!-- Main Content (Initially Hidden) -->
+    <div id="main-content" style="display: none;">
+        <h1>Contact Management</h1>
 
-<!-- Add Contact Form -->
-<form id="add-contact-form">
-    <h2>Add Contact</h2>
-    <input type="text" name="name" placeholder="Name" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <input type="date" name="birthday" placeholder="Birthday" />
-    <input type="text" name="interest" placeholder="Interest" />
-    <input type="text" name="chessExperience" placeholder="Chess Experience" />
-    <textarea name="message" placeholder="Message"></textarea>
-    <button type="submit">Add Contact</button>
-</form>
+        <!-- Add Contact Form -->
+        <form id="add-contact-form">
+            <h2>Add Contact</h2>
+            <input type="text" name="name" placeholder="Name" required />
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="date" name="birthday" placeholder="Birthday" />
+            <input type="text" name="interest" placeholder="Interest" />
+            <input type="text" name="chessExperience" placeholder="Chess Experience" />
+            <textarea name="message" placeholder="Message"></textarea>
+            <button type="submit">Add Contact</button>
+        </form>
 
-<!-- Search Contact -->
-<div class="search">
-    <h2>Search Contact</h2>
-    <input type="text" id="search-name" placeholder="Search by name" />
-    <button id="search-btn">Search</button>
-    <div id="search-results"></div>
-</div>
+        <!-- Search Contact -->
+        <div class="search">
+            <h2>Search Contact</h2>
+            <input type="text" id="search-name" placeholder="Search by name" />
+            <button id="search-btn">Search</button>
+            <div id="search-results"></div>
+        </div>
 
-<!-- Update Contact Form -->
-<form id="update-contact-form">
-    <h2>Update Contact</h2>
-    <input type="text" name="id" placeholder="ID of contact to update (Optional)" />
-    <input type="text" name="name" placeholder="Name (Required if ID not provided)" />
-    <input type="email" name="email" placeholder="Email" />
-    <input type="date" name="birthday" />
-    <input type="text" name="interest" placeholder="Interest" />
-    <input type="text" name="chessExperience" placeholder="Chess Experience" />
-    <textarea name="message" placeholder="Message"></textarea>
-    <button type="submit">Update Contact</button>
-</form>
+        <!-- Update Contact Form -->
+        <form id="update-contact-form">
+            <h2>Update Contact</h2>
+            <input type="text" name="id" placeholder="ID of contact to update (Optional)" />
+            <input type="text" name="name" placeholder="Name (Required if ID not provided)" />
+            <input type="email" name="email" placeholder="Email" />
+            <input type="date" name="birthday" />
+            <input type="text" name="interest" placeholder="Interest" />
+            <input type="text" name="chessExperience" placeholder="Chess Experience" />
+            <textarea name="message" placeholder="Message"></textarea>
+            <button type="submit">Update Contact</button>
+        </form>
 
-<!-- Delete Contact -->
-<div class="delete">
-    <h2>Delete Contact</h2>
-    <input type="text" id="delete-id" placeholder="Enter ID to delete (Optional)" />
-    <input type="text" id="delete-name" placeholder="OR Enter Name to delete" />
-    <button id="delete-btn">Delete</button>
-</div>
+        <!-- Delete Contact -->
+        <div class="delete">
+            <h2>Delete Contact</h2>
+            <input type="text" id="delete-id" placeholder="Enter ID to delete (Optional)" />
+            <input type="text" id="delete-name" placeholder="OR Enter Name to delete" />
+            <button id="delete-btn">Delete</button>
+        </div>
 
-<div id="status-message"></div>
+        <div id="status-message"></div>
+    </div>
 
-<!-- Contact Manager Script -->
-<script src="../javascript/contactmanager.js"></script>
+    <!-- Admin Password Protection Script -->
+    <script>
+        $(document).ready(function () {
+            // Check if admin is already authenticated (using sessionStorage)
+            if (sessionStorage.getItem('adminAuthenticated') === 'true') {
+                $('#admin-overlay').hide();
+                $('#main-content').show();
+            }
+
+            // Handle admin password form submission
+            $('#admin-password-form').submit(function (e) {
+                e.preventDefault();
+
+                const password = $('#admin-password').val();
+                const correctPassword = '747013';
+
+                if (password === correctPassword) {
+                    // Store authentication in session (expires when browser closes)
+                    sessionStorage.setItem('adminAuthenticated', 'true');
+
+                    // Hide overlay and show content
+                    $('#admin-overlay').fadeOut(500);
+                    $('#main-content').fadeIn(500);
+
+                    // Clear password field
+                    $('#admin-password').val('');
+                    $('#password-error').hide();
+                } else {
+                    // Show error message
+                    $('#password-error').fadeIn(300);
+                    $('#admin-password').val('').focus();
+
+                    // Shake the form for visual feedback
+                    $('#admin-password-form').addClass('animate__animated animate__shakeX');
+                    setTimeout(() => {
+                        $('#admin-password-form').removeClass('animate__animated animate__shakeX');
+                    }, 1000);
+                }
+            });
+
+            // O Add logout button to nav (for admin to logout)
+            if (sessionStorage.getItem('adminAuthenticated') === 'true') {
+                const logoutBtn = $('<a href="#" class="nav-link" id="admin-logout">Admin Logout</a>');
+                $('.nav-links').append(logoutBtn);
+
+                logoutBtn.click(function (e) {
+                    e.preventDefault();
+                    sessionStorage.removeItem('adminAuthenticated');
+                    location.reload();
+                });
+            }
+        });
+    </script>
+
+    <!-- Contact Manager Script -->
+    <script src="../javascript/contactmanager.js"></script>
 </body>
 
 </html>
