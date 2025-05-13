@@ -95,4 +95,139 @@ $(document).ready(function () {
     $('.hamburger').click(function () {
         $('.nav-links').toggleClass('active');
     });
+    // Game Rules Page with Animate.css Plugin
+    $(document).ready(function () {
+        // Apply staggered animations to sections based on data-delay
+        $('.rule-section').each(function () {
+            const delay = $(this).data('delay') || 0;
+            const section = $(this);
+
+            setTimeout(function () {
+                section.css('animation-duration', '1s');
+            }, delay * 500);
+        });
+
+        // Apply staggered animations to list items
+        $('.piece-rule, .special-move, .beginner-tip').each(function () {
+            const delay = $(this).data('delay') || 0;
+            const item = $(this);
+
+            setTimeout(function () {
+                item.addClass('animate__fadeInUp');
+            }, delay * 1000);
+        });
+
+        // Hover effects with Animate.css classes
+        $('.piece-rule').hover(
+            function () {
+                $(this).find('.piece-tip').show().addClass('animate__slideInDown');
+                $(this).css({
+                    'background-color': '#f0f8ff',
+                    'border-left': '4px solid #008cba',
+                    'padding-left': '15px',
+                    'border-radius': '5px'
+                });
+            },
+            function () {
+                const tip = $(this).find('.piece-tip');
+                tip.addClass('animate__slideOutUp');
+                $(this).css({
+                    'background-color': '',
+                    'border-left': '',
+                    'padding-left': '',
+                    'border-radius': ''
+                });
+
+                setTimeout(function () {
+                    tip.hide().removeClass('animate__slideInDown animate__slideOutUp');
+                }, 500);
+            }
+        );
+
+        // Special moves hover with different animation
+        $('.special-move').hover(
+            function () {
+                $(this).find('.move-tip').show().addClass('animate__zoomIn');
+                $(this).css({
+                    'background-color': '#fff3cd',
+                    'border': '1px solid #ffc107',
+                    'border-radius': '8px',
+                    'padding': '12px',
+                    'margin': '8px 0',
+                    'transform': 'scale(1.02)'
+                });
+            },
+            function () {
+                const tip = $(this).find('.move-tip');
+                tip.addClass('animate__zoomOut');
+                $(this).css({
+                    'background-color': '',
+                    'border': '',
+                    'border-radius': '',
+                    'padding': '',
+                    'margin': '',
+                    'transform': ''
+                });
+
+                setTimeout(function () {
+                    tip.hide().removeClass('animate__zoomIn animate__zoomOut');
+                }, 300);
+            }
+        );
+
+        // Beginner tips with pulse effect on hover
+        $('.beginner-tip').hover(
+            function () {
+                $(this).find('.tip-explanation').show().addClass('animate__fadeInLeft');
+                $(this).css({
+                    'background-color': '#d4edda',
+                    'border-left': '4px solid #28a745',
+                    'padding-left': '15px',
+                    'margin': '8px 0',
+                    'border-radius': '6px'
+                });
+            },
+            function () {
+                const tip = $(this).find('.tip-explanation');
+                tip.addClass('animate__fadeOutLeft');
+                $(this).css({
+                    'background-color': '',
+                    'border-left': '',
+                    'padding-left': '',
+                    'margin': '',
+                    'border-radius': ''
+                });
+
+                setTimeout(function () {
+                    tip.hide().removeClass('animate__fadeInLeft animate__fadeOutLeft');
+                }, 400);
+            }
+        );
+
+        // Section headers with pulse animation on hover
+        $('.rule-section h2').hover(
+            function () {
+                $(this).parent().find('.rule-tip').show().addClass('animate__bounceIn');
+                $(this).addClass('animate__pulse');
+                $(this).css('color', '#008cba');
+            },
+            function () {
+                const tip = $(this).parent().find('.rule-tip');
+                tip.addClass('animate__bounceOut');
+                $(this).removeClass('animate__pulse').css('color', '#333');
+
+                setTimeout(function () {
+                    tip.hide().removeClass('animate__bounceIn animate__bounceOut');
+                }, 400);
+            }
+        );
+
+        // Title wobble effect on hover
+        $('h1').hover(function () {
+            $(this).addClass('animate__wobble');
+            setTimeout(() => {
+                $(this).removeClass('animate__wobble');
+            }, 1000);
+        });
+    });
 });

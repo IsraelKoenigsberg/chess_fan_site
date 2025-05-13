@@ -5,85 +5,160 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rules of Chess</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../styles.css" />
+    <!-- Animate.css Plugin -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../javascript/authcheck.js"></script>
+    <script src="../javascript/chess-script.js"></script>
 </head>
 
 <body>
 
     <!-- Navigation Bar -->
     <nav>
-        <div class="hamburger">&#9776;</div>
+        <button class="hamburger">&#9776;</button>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
             <a href="about.html" class="nav-link">About Chess</a>
             <a href="mycontactinfo.html" class="nav-link">My Contact Info</a>
             <a href="profile.html" class="nav-link">See Profiles</a>
+            <a href="gamerules.html" class="nav-link">Game Rules</a>
+            <a href="quiz.html" class="nav-link">Take Quiz</a>
         </div>
     </nav>
 
-    <div class="about-container">
-        <h1>Rules of Chess</h1>
+    <div class="about-container animate__animated animate__fadeIn animate__delay-1s">
+        <h1 class="animate__animated animate__bounce">Rules of Chess</h1>
 
-        <section>
+        <section class="rule-section animate__animated animate__fadeInUp" data-delay="0">
             <h2>Objective</h2>
-            <p>The goal of chess is to checkmate your opponent’s king. This means the king is in a position to be
+            <p>The goal of chess is to checkmate your opponent's king. This means the king is in a position to be
                 captured (in check) and there is no way to move the king out of capture.</p>
+            <div class="rule-tip animate__animated" style="display: none;">
+                <strong>💡 Tip:</strong> Practice recognizing checkmate patterns to improve your endgame skills!
+            </div>
         </section>
 
-        <section>
+        <section class="rule-section animate__animated animate__fadeInLeft" data-delay="1">
             <h2>Chessboard</h2>
             <p>The game is played on an 8x8 grid of alternating light and dark squares. Each player starts with 16
                 pieces: 1 king, 1 queen, 2 rooks, 2 knights, 2 bishops, and 8 pawns.</p>
+            <div class="rule-tip animate__animated" style="display: none;">
+                <strong>💡 Tip:</strong> Always orient the board so the bottom-right square is light-colored!
+            </div>
         </section>
 
-        <section>
+        <section class="rule-section animate__animated animate__fadeInRight" data-delay="2">
             <h2>How the Pieces Move</h2>
             <ul class="list-style">
-                <li><strong>King:</strong> Moves one square in any direction.</li>
-                <li><strong>Queen:</strong> Moves any number of squares in any direction.</li>
-                <li><strong>Rook:</strong> Moves in straight lines horizontally or vertically.</li>
-                <li><strong>Bishop:</strong> Moves diagonally any number of squares.</li>
-                <li><strong>Knight:</strong> Moves in an L-shape: two squares in one direction and then one square
-                    perpendicular.</li>
-                <li><strong>Pawn:</strong> Moves forward one square (or two on its first move), captures diagonally.
+                <li class="piece-rule animate__animated" data-piece="king">
+                    <strong>King:</strong> Moves one square in any direction.
+                    <span class="piece-tip animate__animated" style="display: none;">
+                        <br><em>👑 The most important piece - protect it at all costs!</em>
+                    </span>
+                </li>
+                <li class="piece-rule animate__animated" data-piece="queen" data-delay="0.5">
+                    <strong>Queen:</strong> Moves any number of squares in any direction.
+                    <span class="piece-tip animate__animated" style="display: none;">
+                        <br><em>♛ The most powerful piece - combination of rook and bishop!</em>
+                    </span>
+                </li>
+                <li class="piece-rule animate__animated" data-piece="rook" data-delay="1">
+                    <strong>Rook:</strong> Moves in straight lines horizontally or vertically.
+                    <span class="piece-tip animate__animated" style="display: none;">
+                        <br><em>♜ Great for controlling ranks and files!</em>
+                    </span>
+                </li>
+                <li class="piece-rule animate__animated" data-piece="bishop" data-delay="1.5">
+                    <strong>Bishop:</strong> Moves diagonally any number of squares.
+                    <span class="piece-tip animate__animated" style="display: none;">
+                        <br><em>♗ Each player has one light-squared and one dark-squared bishop!</em>
+                    </span>
+                </li>
+                <li class="piece-rule animate__animated" data-piece="knight" data-delay="2">
+                    <strong>Knight:</strong> Moves in an L-shape: two squares in one direction and then one square
+                    perpendicular.
+                    <span class="piece-tip animate__animated" style="display: none;">
+                        <br><em>♞ The only piece that can jump over others!</em>
+                    </span>
+                </li>
+                <li class="piece-rule animate__animated" data-piece="pawn" data-delay="2.5">
+                    <strong>Pawn:</strong> Moves forward one square (or two on its first move), captures diagonally.
+                    <span class="piece-tip animate__animated" style="display: none;">
+                        <br><em>♟ Can become any piece when reaching the opposite end!</em>
+                    </span>
                 </li>
             </ul>
         </section>
 
-        <section>
+        <section class="rule-section animate__animated animate__fadeInUp" data-delay="3">
             <h2>Special Moves</h2>
             <ul class="list-style">
-                <li><strong>Castling:</strong> A special move involving the king and a rook.</li>
-                <li><strong>En passant:</strong> A special pawn capture under specific conditions.</li>
-                <li><strong>Promotion:</strong> A pawn that reaches the opponent’s end of the board can be promoted to
-                    any piece (usually a queen).</li>
+                <li class="special-move animate__animated" data-move="castling">
+                    <strong>Castling:</strong> A special move involving the king and a rook.
+                    <span class="move-tip animate__animated" style="display: none;">
+                        <br><em>🏰 Conditions: King and rook haven't moved, no pieces between them, king not in
+                            check!</em>
+                    </span>
+                </li>
+                <li class="special-move animate__animated" data-move="enpassant" data-delay="0.5">
+                    <strong>En passant:</strong> A special pawn capture under specific conditions.
+                    <span class="move-tip animate__animated" style="display: none;">
+                        <br><em>⚡ Can capture a pawn that just moved two squares past your pawn!</em>
+                    </span>
+                </li>
+                <li class="special-move animate__animated" data-move="promotion" data-delay="1">
+                    <strong>Promotion:</strong> A pawn that reaches the opponent's end of the board can be promoted to
+                    any piece (usually a queen).
+                    <span class="move-tip animate__animated" style="display: none;">
+                        <br><em>🌟 You can have multiple queens on the board!</em>
+                    </span>
+                </li>
             </ul>
         </section>
 
-        <section>
+        <section class="rule-section animate__animated animate__fadeInLeft" data-delay="4">
             <h2>End of the Game</h2>
             <p>The game ends in checkmate, a draw, or resignation.</p>
+            <div class="rule-tip animate__animated" style="display: none;">
+                <strong>💡 Tip:</strong> Learn different draw conditions: stalemate, insufficient material, 50-move
+                rule, threefold repetition!
+            </div>
         </section>
 
-        <section>
+        <section class="rule-section animate__animated animate__fadeInRight" data-delay="5">
             <h2>Tips for Beginners</h2>
             <ul class="list-style">
-                <li>Control the center of the board.</li>
-                <li>Develop your pieces early.</li>
-                <li>Keep your king safe with castling.</li>
-                <li>Don't move the same piece multiple times in the opening.</li>
+                <li class="beginner-tip animate__animated">
+                    Control the center of the board.
+                    <span class="tip-explanation animate__animated" style="display: none;">
+                        <br><em>📍 Central squares (e4, e5, d4, d5) give your pieces more mobility!</em>
+                    </span>
+                </li>
+                <li class="beginner-tip animate__animated" data-delay="0.2">
+                    Develop your pieces early.
+                    <span class="tip-explanation animate__animated" style="display: none;">
+                        <br><em>🚀 Knights before bishops, castle early for king safety!</em>
+                    </span>
+                </li>
+                <li class="beginner-tip animate__animated" data-delay="0.4">
+                    Keep your king safe with castling.
+                    <span class="tip-explanation animate__animated" style="display: none;">
+                        <br><em>🛡️ Castle within the first 10-15 moves to protect your king!</em>
+                    </span>
+                </li>
+                <li class="beginner-tip animate__animated" data-delay="0.6">
+                    Don't move the same piece multiple times in the opening.
+                    <span class="tip-explanation animate__animated" style="display: none;">
+                        <br><em>⏰ Develop all pieces before moving the same piece twice!</em>
+                    </span>
+                </li>
             </ul>
         </section>
     </div>
 
-    <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-    </script>
 </body>
 
 </html>
