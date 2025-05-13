@@ -1,32 +1,66 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
-const contactRoutes = require('./routes/contact');
+const mongoose = require('mongoose');
+const path = require('path');
+
+// Load environment variables
+require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Failed to connect to MongoDB:', err));
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/api/mycontactinfo', contactRoutes);
+// Serve static files from root directory
+app.use(express.static(path.join(__dirname)));
 
-// MongoDB Connection
-mongoose.connect('mongodb+srv://yisraelkoenigsberg:VkhPXBb1J7XAVWv6@cluster0.wbu0e35.mongodb.net/UserInformation?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-    .then(() => {
-        console.log('Connected to MongoDB');
-        app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
-    })
-    .catch(err => console.error(' MongoDB connection failed:', err));
 
-mongoose.connection.on('connected', () => {
-    console.log('MongoDB connected event triggered');
+
+// Import routes
+const contactRoutes = require('./routes/contact');
+const userRoutes = require('./routes/userRoutes');
+const quizRoutes = require('./routes/quizRoutes');
+
+// Request logger
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
 });
-mongoose.connection.on('error', err => {
-    console.error('MongoDB connection error:', err);
+
+// Use routes
+app.use('/api/mycontactinfo', contactRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/quiz', quizRoutes);
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'login.html'));
+});
+
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'index.html'));
+});
+
+app.get('/login.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'login.html'));
+});
+
+app.get('/quiz.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'quiz.html'));
+});
+
+app.use((req, res) => {
+    console.log(`404 for URL: ${req.url}`);
+    res.status(404).json({ error: 'Not found' });
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });

@@ -8,68 +8,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact Management - Chess Basics</title>
     <link rel="stylesheet" href="../styles.css" />
+    <script src="../javascript/authcheck.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../javascript/chess-script.js"></script>
+
+
 </head>
 
-<body class="chess-contact-ui">
-    <!-- Navigation -->
-    <nav>
-        <button class="hamburger">&#9776;</button>
-        <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="about.html" class="nav-link">About Chess</a>
-            <a href="mycontactinfo.html" class="nav-link">My Contact Info</a>
-            <a href="profile.html" class="nav-link">See Profiles</a>
-        </div>
-    </nav>
-
-    <h1>Contact Management</h1>
-
-    <!-- Add Contact Form -->
-    <form id="add-contact-form">
-        <h2>Add Contact</h2>
-        <input type="text" name="name" placeholder="Name" required />
-        <input type="email" name="email" placeholder="Email" required />
-        <input type="date" name="birthday" placeholder="Birthday" />
-        <input type="text" name="interest" placeholder="Interest" />
-        <input type="text" name="chessExperience" placeholder="Chess Experience" />
-        <textarea name="message" placeholder="Message"></textarea>
-        <button type="submit">Add Contact</button>
-    </form>
-
-    <!-- Search Contact -->
-    <div class="search">
-        <h2>Search Contact</h2>
-        <input type="text" id="search-name" placeholder="Search by name" />
-        <button id="search-btn">Search</button>
-        <div id="search-results"></div>
+<!-- Navigation -->
+<nav>
+    <button class="hamburger">&#9776;</button>
+    <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About Chess</a>
+        <a href="mycontactinfo.html" class="nav-link">My Contact Info</a>
+        <a href="profile.html" class="nav-link">See Profiles</a>
+        <a href="quiz.html" class="nav-link">Take Quiz</a>
     </div>
+</nav>
 
-    <!-- Update Contact Form -->
-    <form id="update-contact-form">
-        <h2>Update Contact</h2>
-        <input type="text" name="id" placeholder="ID of contact to update (Optional)" />
-        <input type="text" name="name" placeholder="Name (Required if ID not provided)" />
-        <input type="email" name="email" placeholder="Email" />
-        <input type="date" name="birthday" />
-        <input type="text" name="interest" placeholder="Interest" />
-        <input type="text" name="chessExperience" placeholder="Chess Experience" />
-        <textarea name="message" placeholder="Message"></textarea>
-        <button type="submit">Update Contact</button>
-    </form>
+<h1>Contact Management</h1>
 
-    <!-- Delete Contact -->
-    <div class="delete">
-        <h2>Delete Contact</h2>
-        <input type="text" id="delete-id" placeholder="Enter ID to delete (Optional)" />
-        <input type="text" id="delete-name" placeholder="OR Enter Name to delete" />
-        <button id="delete-btn">Delete</button>
-    </div>
+<!-- Add Contact Form -->
+<form id="add-contact-form">
+    <h2>Add Contact</h2>
+    <input type="text" name="name" placeholder="Name" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="date" name="birthday" placeholder="Birthday" />
+    <input type="text" name="interest" placeholder="Interest" />
+    <input type="text" name="chessExperience" placeholder="Chess Experience" />
+    <textarea name="message" placeholder="Message"></textarea>
+    <button type="submit">Add Contact</button>
+</form>
 
-    <div id="status-message"></div>
+<!-- Search Contact -->
+<div class="search">
+    <h2>Search Contact</h2>
+    <input type="text" id="search-name" placeholder="Search by name" />
+    <button id="search-btn">Search</button>
+    <div id="search-results"></div>
+</div>
 
-    <!-- Contact Manager Script -->
-    <script src="../javascript/contactmanager.js"></script>
+<!-- Update Contact Form -->
+<form id="update-contact-form">
+    <h2>Update Contact</h2>
+    <input type="text" name="id" placeholder="ID of contact to update (Optional)" />
+    <input type="text" name="name" placeholder="Name (Required if ID not provided)" />
+    <input type="email" name="email" placeholder="Email" />
+    <input type="date" name="birthday" />
+    <input type="text" name="interest" placeholder="Interest" />
+    <input type="text" name="chessExperience" placeholder="Chess Experience" />
+    <textarea name="message" placeholder="Message"></textarea>
+    <button type="submit">Update Contact</button>
+</form>
+
+<!-- Delete Contact -->
+<div class="delete">
+    <h2>Delete Contact</h2>
+    <input type="text" id="delete-id" placeholder="Enter ID to delete (Optional)" />
+    <input type="text" id="delete-name" placeholder="OR Enter Name to delete" />
+    <button id="delete-btn">Delete</button>
+</div>
+
+<div id="status-message"></div>
+
+<!-- Contact Manager Script -->
+<script src="../javascript/contactmanager.js"></script>
 </body>
 
 </html>
