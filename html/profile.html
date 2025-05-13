@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="../styles.css">
     <script src="../javascript/authcheck.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../javascript/chess-script.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
@@ -20,16 +22,94 @@
             <a href="mycontactinfo.html" class="nav-link">My Contact Info</a>
             <a href="profile.html" class="nav-link">See Profiles</a>
             <a href="quiz.html" class="nav-link">Take Quiz</a>
-
         </div>
     </nav>
 
-    <h1>Chess.com Player Info</h1>
-    <input type="text" id="username" placeholder="Enter Username">
-    <button id="fetchData">Get Data</button>
-    <div id="results"></div>
+    <h1>Player Profiles</h1>
+
+    <!-- Chess.com Profile Section -->
+    <div class="about-container" style="margin-bottom: 30px;">
+        <h2>Chess.com Player Info</h2>
+        <div class="form-group">
+            <input type="text" id="username" placeholder="Enter Chess.com Username"
+                style="width: 300px; display: inline-block;">
+            <button id="fetchData" style="margin-left: 10px;">Get Data</button>
+        </div>
+        <div id="results"></div>
+    </div>
+
+    <!-- User Profile Section -->
+    <div class="about-container">
+        <h2>Your Profile Information</h2>
+        <p style="color: #666; font-size: 14px;">Enter your username and password to view your profile data</p>
+
+        <form id="user-profile-form">
+            <div class="form-group">
+                <label for="profile-username">Username:</label>
+                <input type="text" id="profile-username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="profile-password">Password:</label>
+                <input type="password" id="profile-password" name="password" required>
+            </div>
+            <button type="submit" id="get-profile-btn">Get My Profile</button>
+        </form>
+
+        <div id="profile-results" style="display: none;">
+            <h3>Your Profile Information</h3>
+            <div class="facts" style="text-align: left;">
+                <p><strong>First Name:</strong> <span id="user-firstname"></span></p>
+                <p><strong>Last Name:</strong> <span id="user-lastname"></span></p>
+                <p><strong>Username:</strong> <span id="user-username"></span></p>
+                <p><strong>Email:</strong> <span id="user-email"></span></p>
+            </div>
+        </div>
+
+        <div id="profile-error" style="display: none; color: red; margin-top: 15px;">
+            <p>Invalid username or password. Please try again.</p>
+        </div>
+    </div>
 
     <script src="../javascript/chess-profile-fetcher.js"></script>
+    <script>
+        // User profile functionality
+        document.getElementById('user-profile-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById('profile-username').value;
+            const password = document.getElementById('profile-password').value;
+
+            // Clear previous results
+            document.getElementById('profile-results').style.display = 'none';
+            document.getElementById('profile-error').style.display = 'none';
+
+            try {
+                const response = await fetch('http://localhost:3000/api/users/profile-by-credentials', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Display user data
+                    document.getElementById('user-firstname').textContent = data.firstname;
+                    document.getElementById('user-lastname').textContent = data.lastname;
+                    document.getElementById('user-username').textContent = data.username;
+                    document.getElementById('user-email').textContent = data.email;
+                    document.getElementById('profile-results').style.display = 'block';
+                } else {
+                    document.getElementById('profile-error').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+                document.getElementById('profile-error').style.display = 'block';
+            }
+        });
+    </script>
 </body>
 
 </html>

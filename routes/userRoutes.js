@@ -164,5 +164,47 @@ router.get('/profile', async (req, res) => {
         res.status(401).json({ message: 'Invalid or expired token' });
     }
 });
+// Add this route to userRoutes.js
+router.post('/profile-by-credentials', async (req, res) => {
+    console.log('Profile by credentials endpoint called');
+    try {
+        const { username, password } = req.body;
 
+        console.log('Profile request for username:', username);
+
+        // Input validation
+        if (!username || !password) {
+            return res.status(400).json({ message: 'Username and password are required' });
+        }
+
+        // Find user by username
+        const user = await User.findOne({ username });
+
+        if (!user) {
+            console.log('Profile fetch failed: User not found');
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        // Verify password using bcrypt (since passwords are hashed)
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            console.log('Profile fetch failed: Invalid password');
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        console.log('Profile fetch successful for user:', username);
+
+        // Return user data (without password and other sensitive fields)
+        res.status(200).json({
+            firstname: user.firstname,
+            lastname: user.lastname,
+            username: user.username,
+            email: user.email
+        });
+    } catch (error) {
+        console.error('Profile fetch error:', error);
+        res.status(500).json({ message: 'Server error during profile fetch' });
+    }
+});
 module.exports = router;

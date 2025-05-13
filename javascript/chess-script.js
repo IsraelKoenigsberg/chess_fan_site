@@ -16,7 +16,6 @@ $(document).ready(function () {
 
     // Event for changing the fun fact text when the button is clicked
     $('#change-fact').click(function () {
-        console.log("Button clicked!");
 
         // Get a new random fact each time the button is clicked
         randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
@@ -26,15 +25,17 @@ $(document).ready(function () {
     });
 
     // Initialize Slick Carousel
-    $(".chess-carousel").slick({
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 2000,
-    });
+    if ($(".chess-carousel").length > 0) {
+        $(".chess-carousel").slick({
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 2000,
+        });
+    }
 
     // Show More Chess Info Button Click Event
     $("#show-more-btn").click(function () {

@@ -6,145 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chess Basics - Quiz</title>
     <link rel="stylesheet" href="../styles.css">
-    <style>
-        body {
-            background-color: #f5f5f5;
-        }
-
-        .quiz-container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .intro {
-            margin-bottom: 30px;
-        }
-
-        .question-container {
-            margin-bottom: 30px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #4CAF50;
-            transition: all 0.3s ease;
-        }
-
-        .question-container:hover {
-            transform: translateX(5px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .question {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .option:hover {
-            background-color: #f1f1f1;
-        }
-
-        .option input {
-            margin-right: 10px;
-        }
-
-        .option label {
-            flex: 1;
-            cursor: pointer;
-        }
-
-        .submit-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            display: block;
-            margin: 30px auto 10px;
-            width: 200px;
-            transition: background-color 0.3s;
-        }
-
-        .submit-btn:hover {
-            background-color: #45a049;
-        }
-
-        .result-container {
-            text-align: center;
-            display: none;
-            padding: 30px;
-            margin-top: 20px;
-            background-color: #e8f5e9;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .score {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #1b5e20;
-        }
-
-        .back-btn {
-            background-color: #2196F3;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 15px 10px;
-            transition: background-color 0.3s;
-        }
-
-        .back-btn:hover {
-            background-color: #0b7dda;
-        }
-
-        .progress {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding: 10px 15px;
-            background-color: #f1f8e9;
-            border-radius: 6px;
-        }
-
-        .progress-text {
-            font-weight: bold;
-            color: #388e3c;
-        }
-
-        .quiz-footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #666;
-            font-size: 14px;
-        }
-    </style>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../javascript/chess-script.js"></script>
 </head>
 
 <body>
@@ -156,44 +20,47 @@
             <a href="mycontactinfo.html" class="nav-link">My Contact Info</a>
             <a href="profile.html" class="nav-link">See Profiles</a>
             <a href="quiz.html" class="nav-link">Take Quiz</a>
+
         </div>
     </nav>
 
-    <div class="quiz-container">
-        <div class="intro">
-            <h1>Test Your Chess Knowledge</h1>
-            <p>Welcome to the Chess Basics quiz! This 10-question quiz will test your knowledge of basic chess rules,
-                piece
-                movements, and game concepts. Answer all questions and submit to see your score. Good luck!</p>
-        </div>
+    <h1>Test Your Chess Knowledge</h1>
 
-        <div class="progress">
-            <span class="progress-text">Total Questions: 10</span>
-            <span class="progress-text">Current Score: <span id="current-score">0</span>/10</span>
-        </div>
+    <div class="about-container">
+        <p>Welcome to the Chess Basics quiz! This 10-question quiz will test your knowledge of basic chess rules, piece
+            movements, and game concepts. Answer all questions and submit to see your score. Good luck!</p>
 
-        <form id="quiz-form">
-            <div id="questions-container">
-                <!-- Questions loaded here -->
-            </div>
-
-            <button type="submit" class="submit-btn">Submit Answers</button>
-        </form>
-
-        <div id="result-container" class="result-container">
-            <h2>Quiz Results</h2>
-            <div id="score" class="score">Your score: 0/10</div>
-            <p id="feedback">Thank you for taking the quiz!</p>
-            <div>
-                <button id="try-again" class="back-btn">Try Again</button>
-                <button id="go-home" class="back-btn">Back to Home</button>
-            </div>
-        </div>
-
-        <div class="quiz-footer">
-            <p>© 2025 Chess Basics. All questions are based on standard chess rules.</p>
+        <div class="facts">
+            <strong>Total Questions: 10</strong> | <strong>Current Score: <span id="current-score">0</span>/10</strong>
         </div>
     </div>
+
+    <form id="quiz-form">
+        <div id="questions-container">
+            <!-- Questions will be loaded here -->
+        </div>
+
+        <button type="submit" id="submit-btn">Submit Answers</button>
+    </form>
+
+    <div id="result-container" style="display: none;">
+        <div class="about-container">
+            <h2>Quiz Results</h2>
+            <div id="score" style="font-size: 28px; font-weight: bold; color: #1b5e20; margin-bottom: 20px;">Your score:
+                0/10</div>
+            <p id="feedback">Thank you for taking the quiz!</p>
+            <div>
+                <button id="try-again" class="button" style="background-color: #2196F3; margin: 10px;">Try
+                    Again</button>
+                <button id="go-home" class="button" style="background-color: #2196F3; margin: 10px;">Back to
+                    Home</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="about-container" style="margin-top: 30px; color: #666; font-size: 14px;">
+        <p>© 2025 Chess Basics. All questions are based on standard chess rules.</p>
+    </footer>
 
     <script src="../javascript/quiz.js"></script>
     <script src="../javascript/authcheck.js"></script>

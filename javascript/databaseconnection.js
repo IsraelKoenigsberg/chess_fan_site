@@ -28,4 +28,3 @@ async function connectDB() {
 
 export default connectDB;
 
-// mongodb+srv://yisraelkoenigsberg:VkhPXBb1J7XAVWv6@cluster0.wbu0e35.mongodb.net/UserInformation?retryWrites=true&w=majority
