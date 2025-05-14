@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 loginMessage.className = 'message success';
                 loginMessage.style.display = 'block';
 
-                // Redirect to main page after 1 second
+                // Redirect to main page after 2 seconds
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 2000);

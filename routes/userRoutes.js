@@ -194,7 +194,7 @@ router.post('/profile-by-credentials', async (req, res) => {
 
         console.log('Profile fetch successful for user:', username);
 
-        // Return user data (without password and other sensitive fields)
+        // Return user data 
         res.status(200).json({
             firstname: user.firstname,
             lastname: user.lastname,
