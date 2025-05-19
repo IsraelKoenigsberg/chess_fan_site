@@ -506,3 +506,19 @@ button {
     background-color: #f8d7da;
     color: #721c24;
 }
+
+.logo-container {
+    position: absolute;
+    /* Or 'fixed' */
+    top: 10px;
+    /* Adjust as needed */
+    left: 10px;
+    /* Logo positioned from the left edge of the page */
+    /* Do NOT add  margin: 0 auto;  here */
+}
+
+.logo {
+    max-width: 100px;
+    /* Adjust as needed */
+    height: auto;
+}
